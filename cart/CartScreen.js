@@ -58,19 +58,16 @@ const CartScreen = () => {
           <TextInput placeholder="Search " />
         </Pressable>
 
-        <Feather name="mic" size={24} color="black" />
       </View>
 
       <View style={{ padding: 10, flexDirection: "row", alignItems: "center" }}>
-        <Text style={{ fontSize: 18, fontWeight: "400" }}>Tổng giá : $</Text>
-        <Text style={{ fontSize: 20, fontWeight: "bold" }}>{total}</Text>
+        <Text style={{ fontSize: 18, fontWeight: "400" }}>Tổng giá : </Text>
+        <Text style={{ fontSize: 20, fontWeight: "bold" }}>{total} VND</Text>
       </View>
-      <Text style={{ marginHorizontal: 10 }}></Text>
 
       <Pressable
-        onPress={() => navigation.navigate("Confirm")}
-        style={{
-          backgroundColor: "#FFC72C",
+        onPress={() => navigation.navigate("Checkout", { cart: cart })}        style={{
+          backgroundColor: "#00FFFF",
           padding: 10,
           borderRadius: 5,
           justifyContent: "center",
@@ -97,7 +94,7 @@ const CartScreen = () => {
             style={{
               backgroundColor: "white",
               marginVertical: 10,
-              borderBottomColor: "#F0F0F0",
+              borderBottomColor: "#00FFFF",
               borderWidth: 2,
               borderLeftWidth: 0,
               borderTopWidth: 0,
@@ -124,7 +121,7 @@ const CartScreen = () => {
                   {item?.title}
                 </Text>
                 <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 6 }}>
-                  Giá: {item?.price} $
+                  Giá: {item?.price} VND
                 </Text>
                 <Image
                   style={{ width: 30, height: 30, resizeMode: "contain" }}

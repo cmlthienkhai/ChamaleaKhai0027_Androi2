@@ -27,7 +27,6 @@ const AddAddressScreen = () => {
       console.log("error", error);
     }
   };
-  //refresh the addresses when the component comes to the focus ie basically when we navigate back
   useFocusEffect(
     useCallback(() => {
       fetchAddresses();
@@ -86,7 +85,6 @@ const AddAddressScreen = () => {
             paddingHorizontal: 5,
           }}
         >
-          <Text>Add a new Address</Text>
           <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
         </Pressable>
 
@@ -120,15 +118,9 @@ const AddAddressScreen = () => {
                 {item?.street}
               </Text>
 
-              <Text style={{ fontSize: 15, color: "#181818" }}>
-                India, Bangalore
-              </Text>
 
               <Text style={{ fontSize: 15, color: "#181818" }}>
-                phone No : {item?.mobileNo}
-              </Text>
-              <Text style={{ fontSize: 15, color: "#181818" }}>
-                pin code : {item?.postalCode}
+                Số đt : {item?.mobileNo}
               </Text>
 
               <View
@@ -175,7 +167,6 @@ const AddAddressScreen = () => {
                     borderColor: "#D0D0D0",
                   }}
                 >
-                  <Text>Set as Default</Text>
                 </Pressable>
               </View>
             </Pressable>

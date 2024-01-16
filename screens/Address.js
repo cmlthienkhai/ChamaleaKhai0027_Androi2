@@ -25,7 +25,7 @@ const AddressScreen = () => {
         {selectedLocation && (
           <MapView
             style={{ height: 200, marginTop: 10 }}
-            region={{
+            initialRegion={{
               latitude: selectedLocation.latitude,
               longitude: selectedLocation.longitude,
               latitudeDelta: 0.0922,

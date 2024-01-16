@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, ScrollView, Pressable, TextInput, ImageBackground, Dimensions, } from "react-native";
-import React, { useState } from "react";
+import {StyleSheet,Text,View,ScrollView,Pressable,TextInput,ImageBackground,Dimensions,} from "react-native";
+import React, { useState, useEffect } from "react";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -7,22 +7,48 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../cart/CartReducer";
 
-const ProductInfoScreen = () => {
-  const route = useRoute();
+const productDetails = ({ route }) => {
+  const { productId, carouselImages, title, oldPrice, price } = route.params;
   const { width } = Dimensions.get("window");
   const navigation = useNavigation();
   const [addedToCart, setAddedToCart] = useState(false);
-  const height = (width * 100) / 100;
   const dispatch = useDispatch();
-  const addItemToCart = (item) => {
-    setAddedToCart(true);
-    dispatch(addToCart(item));
-    setTimeout(() => {
-      setAddedToCart(false);
-    }, 60000);
+  const [productDetail, setProductDetail] = useState(null);
+  const addItemToCart = () => {
+    if (route.params && route.params.id && !addedToCart) {
+      console.log('Adding item to cart:', route.params);
+      setAddedToCart(true);
+      dispatch(addToCart(route.params));
+      setTimeout(() => {
+        setAddedToCart(false);
+      }, 60000);
+    } else {
+      console.error('Invalid item or already added to cart:', route.params);
+    }
   };
   const cart = useSelector((state) => state.cart.cart);
   console.log(cart);
+
+  const fetchProductDetail = async (productId) => {
+    try {
+      const response = await axios.get(`https://fakestoreapi.com/products/${productId}`);
+      const productDetail = response.data;
+      console.log('Info:', productDetail);
+      setProductDetail(productDetail);
+    } catch (error) {
+      console.error('Lỗi khi tìm chi tiết sản phẩm:', error);
+    }
+  };
+  useEffect(() => {
+    console.log('Product ID:', productId);
+    if (!productDetail && productId) {
+      fetchProductDetail(productId);
+    }
+  }, [productId, productDetail]);
+  const navigateToProductDetail = () => {
+    navigation.navigate('Info', { productId });
+  };
+
   return (
     <ScrollView
       style={{ marginTop: 55, flex: 1, backgroundColor: "white" }}
@@ -30,7 +56,7 @@ const ProductInfoScreen = () => {
     >
       <View
         style={{
-          backgroundColor: "#00CED1",
+          backgroundColor: "#00FFFF",
           padding: 10,
           flexDirection: "row",
           alignItems: "center",
@@ -57,13 +83,12 @@ const ProductInfoScreen = () => {
           <TextInput placeholder=" " />
         </Pressable>
 
-        <Feather name="mic" size={24} color="black" />
       </View>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {route.params.carouselImages.map((item, index) => (
+        {carouselImages && carouselImages.map((item, index) => (
           <ImageBackground
-            style={{ width, height, marginTop: 25, resizeMode: "contain" }}
+            style={{ width, height: (width * 100) / 100, marginTop: 25, resizeMode: "contain" }}
             source={{ uri: item }}
             key={index}
           >
@@ -80,114 +105,46 @@ const ProductInfoScreen = () => {
                   width: 40,
                   height: 40,
                   borderRadius: 20,
-                  backgroundColor: "#C60C30",
                   justifyContent: "center",
                   alignItems: "center",
                   flexDirection: "row",
                 }}
               >
-                <Text
-                  style={{
-                    color: "white",
-                    textAlign: "center",
-                    fontWeight: "600",
-                    fontSize: 12,
-                  }}
-                >
-                  20% off
-                </Text>
               </View>
-
-              <View
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 20,
-                  backgroundColor: "#E0E0E0",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexDirection: "row",
-                }}
-              >
-                <MaterialCommunityIcons
-                  name="share-variant"
-                  size={24}
-                  color="black"
-                />
-              </View>
-            </View>
-
-            <View
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 20,
-                backgroundColor: "#E0E0E0",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "row",
-                marginTop: "auto",
-                marginLeft: 20,
-                marginBottom: 20,
-              }}
-            >
-              <AntDesign name="hearto" size={24} color="black" />
             </View>
           </ImageBackground>
         ))}
       </ScrollView>
 
-      <View style={{ padding: 10 }}>
-        <Text style={{ fontSize: 15, fontWeight: "500" }}>
-          {route?.params?.title}
-        </Text>
-
-        <Text style={{ fontSize: 18, fontWeight: "600", marginTop: 6 }}>
-         ${route?.params?.price}
-        </Text>
-      </View>
-
-      <Text style={{ height: 1, borderColor: "#D0D0D0", borderWidth: 1 }} />
-
-      <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
-        <Text>Color: </Text>
-        <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-          {route?.params?.color}
-        </Text>
-      </View>
-
-      <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
-        <Text>Size: </Text>
-        <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-          {route?.params?.size}
-        </Text>
-      </View>
-
-      <Text style={{ height: 1, borderColor: "#D0D0D0", borderWidth: 1 }} />
-
-      <View style={{ padding: 10 }}>
-        <Text style={{ fontSize: 15, fontWeight: "bold", marginVertical: 5 }}>
-          Total :${route.params.price}
-        </Text>
-
-        <View
-          style={{
-            flexDirection: "row",
-            marginVertical: 5,
-            alignItems: "center",
-            gap: 5,
-          }}
+      <View style={{ padding: 10, flexDirection: 'column' }}>
+        <Text
+          style={{ fontSize: 15, fontWeight: '500' }}
         >
+          {title}
+        </Text>
 
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6 }}>
+          <Text style={{ fontSize: 18, fontWeight: '600', marginRight: 5 }}>Giá gốc:</Text>
+          {oldPrice && (
+            <Text style={{ textDecorationLine: 'line-through', color: 'gray', marginRight: 5 }}>
+              {oldPrice} VND
+            </Text>
+          )}
+          <Text style={{ fontSize: 18, fontWeight: '600', color: 'red' }}>Giá sale: {price} VND</Text>
         </View>
       </View>
 
-      
+      <Text style={{ height: 1, borderColor: "#00FFFF", borderWidth: 1 }} />
+
+      <View style={{ padding: 10 }}>
+        <View style={{ flexDirection: "row", marginVertical: 5, alignItems: "center", gap: 5 }}>
+        </View>
+      </View>
 
       <Pressable
-        onPress={() => addItemToCart(route?.params?.item)}
+        onPress={addItemToCart}
         style={{
-          backgroundColor: "#FFC72C",
+          backgroundColor: "#00FFFF",
           padding: 10,
           borderRadius: 20,
           justifyContent: "center",
@@ -207,7 +164,7 @@ const ProductInfoScreen = () => {
 
       <Pressable
         style={{
-          backgroundColor: "#FFAC1C",
+          backgroundColor: "#00FFFF",
           padding: 10,
           borderRadius: 20,
           justifyContent: "center",
@@ -221,7 +178,6 @@ const ProductInfoScreen = () => {
     </ScrollView>
   );
 };
-
-export default ProductInfoScreen;
+export default productDetails;
 
 const styles = StyleSheet.create({});

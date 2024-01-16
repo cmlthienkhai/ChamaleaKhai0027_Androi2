@@ -4,9 +4,6 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 import { UserType } from "./UserContext";
-import { auth } from '../firebase';
-import { signOut } from 'firebase/auth';
-
 const ProfileScreen = () => {
   const { userId, setUserId } = useContext(UserType);
   const [orders, setOrders] = useState([]);

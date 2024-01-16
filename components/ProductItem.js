@@ -1,11 +1,12 @@
-import { StyleSheet, Text, View, Pressable, Image } from "react-native";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../cart/CartReducer";
+import React, { useState } from 'react';
+import { Pressable, Image, TouchableOpacity, Text, View, StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../cart/CartReducer';
 
-const ProductItem = ({ item }) => {
+const ProductItem = ({ item, navigateToProductDetail }) => {
   const [addedToCart, setAddedToCart] = useState(false);
   const dispatch = useDispatch();
+
   const addItemToCart = (item) => {
     setAddedToCart(true);
     dispatch(addToCart(item));
@@ -13,52 +14,73 @@ const ProductItem = ({ item }) => {
       setAddedToCart(false);
     }, 60000);
   };
+
   return (
-    <Pressable style={{ marginHorizontal: 20, marginVertical: 25 }}>
+    <Pressable style={localStyles.container}>
       <Image
-        style={{ width: 150, height: 150, resizeMode: "contain" }}
+        style={localStyles.image}
         source={{ uri: item?.image }}
       />
 
-      <Text numberOfLines={1} style={{ width: 150, marginTop: 10 }}>
-        {item?.title}
-      </Text>
+      <TouchableOpacity onPress={navigateToProductDetail}>
+        <Text style={localStyles.title}>{item.title}</Text>
+      </TouchableOpacity>
 
-      <View
-        style={{
-          marginTop: 5,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Text style={{ fontSize: 15, fontWeight: "bold" }}>${item?.price}</Text>
+      <View style={localStyles.infoContainer}>
+        <Text style={localStyles.price}>{item?.price} VND</Text>
       </View>
 
       <Pressable
         onPress={() => addItemToCart(item)}
-        style={{
-          backgroundColor: "#FFC72C",
-          padding: 10,
-          borderRadius: 20,
-          justifyContent: "center",
-          alignItems: "center",
-          marginHorizontal: 10,
-          marginTop: 10,
-        }}
+        style={localStyles.addToCartButton}
       >
         {addedToCart ? (
           <View>
             <Text>Đã thêm vào giỏ</Text>
           </View>
         ) : (
-            <Text>Thêm vào giỏ</Text>
+          <Text>Thêm vào giỏ</Text>
         )}
       </Pressable>
     </Pressable>
   );
 };
 
-export default ProductItem;
+const localStyles = StyleSheet.create({
+  container: {
+    marginHorizontal: 20,
+    marginVertical: 25,
+  },
+  image: {
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
+  },
+  title: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    width: 150, // Đặt giá trị chiều rộng cố định cho Text
+  },
+  infoContainer: {
+    marginTop: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  price: {
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+  addToCartButton: {
+    backgroundColor: "#00FFFF",
+    padding: 10,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 10,
+    marginTop: 10,
+    
+  },
+});
 
-const styles = StyleSheet.create({});
+export default ProductItem;

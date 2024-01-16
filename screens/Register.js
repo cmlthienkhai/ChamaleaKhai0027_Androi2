@@ -1,205 +1,79 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Pressable,
-  TextInput,
-  SafeAreaView,
-  KeyboardAvoidingView,
-  Alert,
-  ActivityIndicator
-} from "react-native";
-import { Feather } from '@expo/vector-icons';
-import { Ionicons } from "@expo/vector-icons";
-import React, { useState, useEffect } from "react";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../firebase";
-import { doc, setDoc } from "firebase/firestore";
+// RegisterScreen.js
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Pressable } from 'react-native';
+import axios from 'axios';
 
-const RegisterScreen = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigation = useNavigation();
+const RegisterScreen = ({ navigation }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
-  const register = () => {
-    if (email === "" || password === "" || phone === "") {
-      Alert.alert(
-        "Invalid Details",
-        "Please fill in all the details",
-        [
-          {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel"
-          },
-          { text: "OK", onPress: () => console.log("OK Pressed") }
-        ],
-        { cancelable: false }
-      );
-      return;
-    }
-
-    setLoading(true);
-
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential._tokenResponse.email;
-        const myUserUid = auth.currentUser.uid;
-
-        setDoc(doc(db, "users", `${myUserUid}`), {
-          email: user,
-          phone: phone
-        }).then(() => {
-          setLoading(false);
-          console.log("Registration successful");
-        }).catch((error) => {
-          setLoading(false);
-          console.error("Firestore error:", error.message);
-        });
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.error("Registration error:", error.message);
-        Alert.alert("Registration Error", error.message);
+  const handleRegister = async () => {
+    try {
+      const response = await axios.post('http://127.0.0.1:3000/register', {
+        username,
+        password,
       });
+
+      console.log('Response from server:', response.data);
+
+      // Handle navigation or other actions based on server response
+    } catch (error) {
+      console.error('Registration error:', error.message);
+    }
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "white",
-        alignItems: "center",
-        padding: 10,
-      }}
-    >
-      {loading ? (
-        <View style={{ alignItems: "center", justifyContent: "center", flexDirection: "row", flex: 1 }}>
-          <Text style={{ marginRight: 10 }}>Loading</Text>
-          <ActivityIndicator size="large" color={"red"} />
-        </View>
-      ) : (
-        <KeyboardAvoidingView>
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: 100,
-            }}
-          >
-            <Text style={{ fontSize: 20, color: "#662d91", fontWeight: "bold" }}>
-              Register
-            </Text>
-
-            <Text style={{ fontSize: 18, marginTop: 8, fontWeight: "600" }}>
-              Create a new Account
-            </Text>
-          </View>
-
-          <View style={{ marginTop: 50 }}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <MaterialCommunityIcons
-                name="email-outline"
-                size={24}
-                color="black"
-              />
-              <TextInput
-                placeholder="Email"
-                value={email}
-                onChangeText={(text) => setEmail(text)}
-                placeholderTextColor="black"
-                style={{
-                  fontSize: email ? 18 : 18,
-                  borderBottomWidth: 1,
-                  borderBottomColor: "gray",
-                  marginLeft: 13,
-                  width: 300,
-                  marginVertical: 10,
-                }}
-              />
-            </View>
-
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Ionicons name="key-outline" size={24} color="black" />
-              <TextInput
-                value={password}
-                onChangeText={(text) => setPassword(text)}
-                secureTextEntry={true}
-                placeholder="Password"
-                placeholderTextColor="black"
-                style={{
-                  fontSize: password ? 18 : 18,
-                  borderBottomWidth: 1,
-                  borderBottomColor: "gray",
-                  marginLeft: 13,
-                  width: 300,
-                  marginVertical: 20,
-                }}
-              />
-            </View>
-
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Feather name="phone" size={24} color="black" />
-              <TextInput
-                value={phone}
-                onChangeText={(text) => setPhone(text)}
-                placeholder="Phone No"
-                placeholderTextColor="black"
-                style={{
-                  fontSize: password ? 18 : 18,
-                  borderBottomWidth: 1,
-                  borderBottomColor: "gray",
-                  marginLeft: 13,
-                  width: 300,
-                  marginVertical: 10,
-                }}
-              />
-            </View>
-
-            <Pressable
-              onPress={register}
-              style={{
-                width: 200,
-                backgroundColor: "#318CE7",
-                padding: 15,
-                borderRadius: 7,
-                marginTop: 50,
-                marginLeft: "auto",
-                marginRight: "auto",
-              }}
-            >
-              <Text style={{ fontSize: 18, textAlign: "center", color: "white" }}>
-                Register
-              </Text>
-            </Pressable>
-
-            <Pressable onPress={() => navigation.goBack()} style={{ marginTop: 20 }}>
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: 17,
-                  color: "gray",
-                  fontWeight: "500",
-                }}
-              >
-                Already have an account? Sign in
-              </Text>
-            </Pressable>
-          </View>
-        </KeyboardAvoidingView>
-      )}
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Text style={styles.header}>Register</Text>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Username"
+          value={username}
+          onChangeText={(text) => setUsername(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+          secureTextEntry
+        />
+      </View>
+      <Button title="Register" onPress={handleRegister} />
+      <Pressable onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.link}>Already have an account? Login now</Text>
+      </Pressable>
+    </View>
   );
 };
 
-export default RegisterScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  inputContainer: {
+    width: '100%',
+    marginBottom: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderBottomWidth: 1,
+    marginBottom: 10,
+  },
+  link: {
+    color: 'blue',
+    marginTop: 10,
+  },
+});
 
-const styles = StyleSheet.create({});
+export default RegisterScreen;
