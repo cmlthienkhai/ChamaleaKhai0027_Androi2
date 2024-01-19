@@ -7,14 +7,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Entypo, AntDesign, Ionicons } from "@expo/vector-icons";
-import Home from "./screens/Home";
+import Home from "./components/Home";
 import CartScreen from "./cart/CartScreen";
 import Profile from "./screens/Profile";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import Address from "./screens/Address";
 import AddAddress from "./screens/AddAddress";
-import ProductDetails from "./components/ProductDetails";
+import ProductDetails from "./products/ProductDetails";
 import store from "./store";
 import { UserContext } from "./screens/UserContext";
 import Search from "./screens/Search";
@@ -94,6 +94,8 @@ export default function App() {
               <Stack.Screen name="CartScreen" component={CartScreen} options={{ headerShown: false }} />
               <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
               <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
+              <Stack.Screen name="ProductDetails" component={ProductDetails} options={{ headerShown: false }} />
+
             </Stack.Navigator>
           </NavigationContainer>
           <ModalPortal />

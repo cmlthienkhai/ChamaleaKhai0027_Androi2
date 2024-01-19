@@ -10,7 +10,7 @@ import {
     TextInput,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import ProductItem from "../components/ProductItem";
+import ProductItem from "../products/ProductItem";
 import axios from "axios";
 
 const SearchScreen = ({ navigation }) => {
@@ -40,7 +40,7 @@ const SearchScreen = ({ navigation }) => {
     }, [searchQuery, products]);
 
     const navigateToProductDetail = (productId) => {
-        navigation.navigate("ProductDetail", { productId });
+        navigation.navigate("Info", { productId });
     };
 
     return (

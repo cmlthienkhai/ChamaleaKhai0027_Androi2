@@ -3,12 +3,12 @@ const bcrypt = require('bcryptjs');
 const users = [
     {
         id: 1,
-        username: 'user1',
+        username: 'tk',
         password: '123456' 
     },
     {
         id: 2,
-        username: 'user2',
+        username: 'tk1',
         password: '123456' 
     }
 ];

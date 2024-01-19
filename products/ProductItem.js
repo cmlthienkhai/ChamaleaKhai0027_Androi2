@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Pressable, Image, TouchableOpacity, Text, View, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../cart/CartReducer';
+import ProductDetails from './ProductDetails';
+
 
 const ProductItem = ({ item, navigateToProductDetail }) => {
   const [addedToCart, setAddedToCart] = useState(false);
