@@ -29,8 +29,8 @@ const HomeScreen = () => {
       id: "0",
       title: "Áo Khoác",
       offer: " Sale ",
-      oldPrice: 350000,
-      price: 150000,
+      oldPrice: 55.00,
+      price: 35.00,
       image:
         "https://nhatminhdecor.com/wp-content/uploads/2019/01/chup-anh-voi-phong-nen-vai-trang.jpg",
       carouselImages: [
@@ -42,8 +42,8 @@ const HomeScreen = () => {
       id: "1",
       title: "Quần Jean",
       offer: "Sale ",
-      oldPrice: 455000,
-      price: 250000,
+      oldPrice: 45.50,
+      price: 25.00,
       image:
         "https://dony.vn/wp-content/uploads/2021/08/quan-jean-nam-dep-ban-chay-10.jpg",
       carouselImages: [
@@ -55,8 +55,8 @@ const HomeScreen = () => {
       id: "2",
       title: "Balo",
       offer: "Sale",
-      oldPrice: 230000,
-      price: 100000,
+      oldPrice: 23.00,
+      price: 10.00,
       image:
         "https://dji-vietnam.vn/wp-content/uploads/2023/08/balo-pgytech-onemo-lite-3.jpeg",
       carouselImages: [

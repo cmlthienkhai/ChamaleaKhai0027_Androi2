@@ -121,11 +121,11 @@ const CheckoutScreen = ({ route }) => {
             <View style={styles.totalContainer}>
                 <View style={styles.totalRow}>
                     <Text style={styles.label}>Tổng giá trước giảm giá :</Text>
-                    <Text style={styles.price}>{totalBeforeDiscount} VND</Text>
+                    <Text style={styles.price}>{totalBeforeDiscount} $</Text>
                 </View>
                 <View style={styles.totalRow}>
                     <Text style={styles.label}>Tổng giá sau giảm giá :</Text>
-                    <Text style={styles.price}>{totalAfterDiscount.toFixed(2)} VND</Text>
+                    <Text style={styles.price}>{totalAfterDiscount.toFixed(2)} $</Text>
                 </View>
                 
                 <Button title="Thanh toán" onPress={handlePayment} />

@@ -62,7 +62,7 @@ const CartScreen = () => {
 
       <View style={{ padding: 10, flexDirection: "row", alignItems: "center" }}>
         <Text style={{ fontSize: 18, fontWeight: "400" }}>Tổng giá : </Text>
-        <Text style={{ fontSize: 20, fontWeight: "bold" }}>{total} VND</Text>
+        <Text style={{ fontSize: 20, fontWeight: "bold" }}>{total} $</Text>
       </View>
 
       <Pressable
@@ -121,7 +121,7 @@ const CartScreen = () => {
                   {item?.title}
                 </Text>
                 <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 6 }}>
-                  Giá: {item?.price} VND
+                  Giá: {item?.price} $
                 </Text>
                 <Image
                   style={{ width: 30, height: 30, resizeMode: "contain" }}

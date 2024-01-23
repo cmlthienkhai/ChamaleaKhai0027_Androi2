@@ -9,7 +9,10 @@ const ProfileScreen = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
+  const handleGoHome = () => {
 
+    navigation.navigate("Login");
+  };
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "",
@@ -55,15 +58,15 @@ const ProfileScreen = () => {
     fetchUserProfile();
   }, [userId]); // Thêm userId vào dependency array để useEffect được gọi lại khi userId thay đổi
 
-  const logout = async () => {
-    try {
-      await signOut(auth);
-      console.log("User signed out");
-      navigation.replace("Login");
-    } catch (error) {
-      console.error("Sign out error", error);
-    }
-  };
+  //const logout = async () => {
+    //try {
+      //await signOut(auth);
+      //console.log("User signed out");
+      //navigation.replace("Login");
+    //} catch (error) {
+     // console.error("Sign out error", error);
+   // }
+  //};
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -82,18 +85,18 @@ const ProfileScreen = () => {
     fetchOrders();
   }, [userId]); // Thêm userId vào dependency array để useEffect được gọi lại khi userId thay đổi
 
-  console.log("orders", orders);
-  console.log("User Data:", user);
-  const unsubscribe = auth.onAuthStateChanged((authUser) => {
-    if (authUser) {
+  //console.log("orders", orders);
+  //console.log("User Data:", user);
+  //const unsubscribe = auth.onAuthStateChanged((authUser) => {
+    //if (authUser) {
       // Người dùng đã đăng nhập
-      console.log("Auth User:", authUser);
-      console.log("User Email:", authUser.email);
-    } else {
+      //console.log("Auth User:", authUser);
+      //console.log("User Email:", authUser.email);
+   // } else {
       // Người dùng chưa đăng nhập
-      console.log("User not logged in");
-    }
-  });
+    //  console.log("User not logged in");
+    //}
+ // });
 
   return (
     <ScrollView style={{ padding: 10, flex: 1, backgroundColor: "white" }}>
@@ -118,9 +121,8 @@ const ProfileScreen = () => {
 
       <View style={styles.actionButtonContainer}>
         <Pressable
-          onPress={logout}
           style={styles.actionButton}
-        >
+          onPress={handleGoHome}>
           <Text style={styles.actionButtonText}>Đăng xuất</Text>
         </Pressable>
       </View>

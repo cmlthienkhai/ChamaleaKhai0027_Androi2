@@ -1,19 +1,18 @@
-import {StyleSheet,Text,View,ScrollView,Pressable,TextInput,ImageBackground,Dimensions,} from "react-native";
+import { ScrollView, Text, View, Pressable, TextInput, ImageBackground } from "react-native";
 import React, { useState, useEffect } from "react";
-import { AntDesign, Feather } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../cart/CartReducer";
 import axios from "axios";
-const productDetails = ({ route }) => {
-  const { productId, carouselImages, title, oldPrice, price } = route.params;
-  const { width } = Dimensions.get("window");
+
+const ProductDetails = ({ route }) => {
+  const { productId, carouselImages, oldPrice, price } = route.params;
   const navigation = useNavigation();
   const [addedToCart, setAddedToCart] = useState(false);
   const dispatch = useDispatch();
   const [productDetail, setProductDetail] = useState(null);
+
   const addItemToCart = () => {
     if (route.params && route.params.id && !addedToCart) {
       console.log('Adding item to cart:', route.params);
@@ -26,8 +25,6 @@ const productDetails = ({ route }) => {
       console.error('Invalid item or already added to cart:', route.params);
     }
   };
-  const cart = useSelector((state) => state.cart.cart);
-  console.log(cart);
 
   const fetchProductDetail = async (productId) => {
     try {
@@ -39,15 +36,13 @@ const productDetails = ({ route }) => {
       console.error('Lỗi khi tìm chi tiết sản phẩm:', error);
     }
   };
+
   useEffect(() => {
     console.log('Product ID:', productId);
     if (!productDetail && productId) {
       fetchProductDetail(productId);
     }
   }, [productId, productDetail]);
-  const navigateToProductDetail = () => {
-    navigation.navigate('Info', { productId });
-  };
 
   return (
     <ScrollView
@@ -82,64 +77,34 @@ const productDetails = ({ route }) => {
           />
           <TextInput placeholder=" " />
         </Pressable>
-
       </View>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {carouselImages && carouselImages.map((item, index) => (
           <ImageBackground
-            style={{ width, height: (width * 100) / 100, marginTop: 25, resizeMode: "contain" }}
+            style={{ width: 300, height: 300, marginTop: 25, resizeMode: "contain" }}
             source={{ uri: item }}
             key={index}
-          >
-            <View
-              style={{
-                padding: 20,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <View
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 20,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexDirection: "row",
-                }}
-              >
-              </View>
-            </View>
-          </ImageBackground>
+          />
         ))}
       </ScrollView>
 
       <View style={{ padding: 10, flexDirection: 'column' }}>
-        <Text
-          style={{ fontSize: 15, fontWeight: '500' }}
-        >
-          {title}
+        <Text style={{ fontSize: 15, fontWeight: '500' }}>
+          {route.params.title}
         </Text>
-
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6 }}>
           <Text style={{ fontSize: 18, fontWeight: '600', marginRight: 5 }}>Giá gốc:</Text>
           {oldPrice && (
             <Text style={{ textDecorationLine: 'line-through', color: 'gray', marginRight: 5 }}>
-              {oldPrice} VND
+              {oldPrice} $
             </Text>
           )}
-          <Text style={{ fontSize: 18, fontWeight: '600', color: 'red' }}>Giá sale: {price} VND</Text>
+          <Text style={{ fontSize: 18, fontWeight: '600', color: 'red' }}>Giá sale: {price} $</Text>
         </View>
       </View>
 
-      <Text style={{ height: 1, borderColor: "#00FFFF", borderWidth: 1 }} />
-
-      <View style={{ padding: 10 }}>
-        <View style={{ flexDirection: "row", marginVertical: 5, alignItems: "center", gap: 5 }}>
-        </View>
-      </View>
+      <View style={{ height: 1, borderColor: "#00FFFF", borderWidth: 1 }} />
 
       <Pressable
         onPress={addItemToCart}
@@ -178,6 +143,5 @@ const productDetails = ({ route }) => {
     </ScrollView>
   );
 };
-export default productDetails;
 
-const styles = StyleSheet.create({});
+export default ProductDetails;
